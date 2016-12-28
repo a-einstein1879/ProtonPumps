@@ -60,14 +60,6 @@ function [dynamicsOutput, cumulativeOutput] = runSimulation(sP, sS)
         
         [gammaQ, WNpr, WPpr] = calculateQuinoneGamma(sP, sS, OmegaQ);
         
-        OmegaQ
-        gammaA
-        gammaB
-        gammaLH
-        gammaQ
-        WNpr
-        WPpr
-        pause(10)
         sS = changeSystemState(sS, sP, gammaA, gammaB, gammaLH, gammaQ);
         
         %% Fill in the output array

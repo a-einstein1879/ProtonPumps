@@ -6,8 +6,6 @@ function [gammaA, gammaB] = calculateABGammas(sS, sP, OmegaQ)
     x0 = sP.qMM.x0;
     NLevRC = sP.numberOfLevels.RC;
     
-    % Sums in formula Feb/3/2011/A-11 for "0 -> 1" and "1 -> 0"
-    % transitions to A and D sites
     a1 = sP.CAOperators.a1;
     a2 = sP.CAOperators.a2;
     aa12 = abs(a1).^2 + abs(a2).^2;
@@ -17,6 +15,8 @@ function [gammaA, gammaB] = calculateABGammas(sS, sP, OmegaQ)
     LamAQ = sP.lambdas.LamAQ;
     LamDQ = sP.lambdas.LamDQ;
     
+    % Sums in formula Feb/3/2011/A-11 for "0 -> 1" and "1 -> 0"
+    % transitions to A and D sites
     PhA = zeros(NLevRC, NLevRC);
     PhD = zeros(NLevRC, NLevRC);
     PhA(1,2) = sum((aa12' .* exp(-(OmegaQ - eA + LamAQ).^2./(4 * LamAQ * sP.TT))) * Qs);
