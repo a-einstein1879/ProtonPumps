@@ -6,13 +6,13 @@ function sS0 = setSystemInitialState(VoltageIdx, SDChainIdx, sP)
     f1 = 'ASite'; v1 = 1;
     % B-site state
     % nB = 0, empty B-site
-    f2 = 'BSite'; v2 = 0.5;
+    f2 = 'BSite'; v2 = 0;
     % S-site state
     % nS = 0, empty S-site
     f3 = 'SSite'; v3 = 0;
     % D-site state
     % nD = 0, empty D-site
-    f4 = 'DSite'; v4 = 0;
+    f4 = 'DSite'; v4 = 0.5;
     % Quinone state
     % Quinone initial state (from 1 to 16) (Q-basis on Feb/2/2011/A-6)
     MQ = 1;
@@ -46,12 +46,12 @@ function sS0 = setSystemInitialState(VoltageIdx, SDChainIdx, sP)
     f3 = 'VP'; v3 = 0.5 * (sP.VSet(VoltageIdx) + v1);
     value4 = struct(f1, v1, f2, v2, f3, v3);
     
-    %% Energy shifts of A,B,L,H energies due to NP field gradient
+    %% Energy shifts of A,D,L,H energies due to NP field gradient
     field5 = 'energyShifts';
     % eA = eA - VN
     f1 = 'eA'; v1 = sP.energyLevels.eA - value4.VN;
-    % eD = eB + VP
-    f2 = 'eB'; v2 = sP.energyLevels.eB + value4.VP;
+    % eD = eD + VP
+    f2 = 'eD'; v2 = sP.energyLevels.eD + value4.VP;
     % eH = eH - VN
     f3 = 'eH'; v3 = sP.energyLevels.eH - value4.VN;
     % eL = eL + VP
@@ -68,16 +68,16 @@ function sS0 = setSystemInitialState(VoltageIdx, SDChainIdx, sP)
     % fSeA = 1./( exp((eA-muS)/TT) + 1 )
     f1 = 'fSeA'; v1 = 1 ./ (exp((value5.eA - value3.S) / sP.TT) + 1);
     % fDeD = 1./( exp((eD-muD)/TT) + 1 )
-    f2 = 'fBeD'; v2 = 1 ./ (exp((value5.eB - value3.D) / sP.TT) + 1);
+    f2 = 'fDeD'; v2 = 1 ./ (exp((value5.eD - value3.D) / sP.TT) + 1);
 
     % normed gammas
-    GamSA = zeros(2,2); GamBD = zeros(2,2);
+    GamSA = zeros(2,2); GamDB = zeros(2,2);
     GamSA(1,2) = sP.gammas.gamS .* (1 - v1);
     GamSA(2,1) = sP.gammas.gamS .* v1;
-    GamBD(1,2) = sP.gammas.gamD .* (1 - v2);
-    GamBD(2,1) = sP.gammas.gamD .* v2;
+    GamDB(1,2) = sP.gammas.gamD .* (1 - v2);
+    GamDB(2,1) = sP.gammas.gamD .* v2;
     f3 = 'GamSA'; v3 = GamSA;
-    f4 = 'GamBD'; v4 = GamBD;
+    f4 = 'GamDB'; v4 = GamDB;
     
     value6 = struct(f1, v1, f2, v2, f3, v3, f4, v4);
     

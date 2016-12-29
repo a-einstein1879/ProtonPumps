@@ -1,3 +1,4 @@
+
 function [gammaQ, WNpr, WPpr] = calculateQuinoneGamma(sP, sS, OmegaQ)
     %% Calculate total gamma of quinone
     % GamQA + GamQD + GamQLH + GamQNP
@@ -18,7 +19,7 @@ function [gammaQ, WNpr, WPpr] = calculateQuinoneGamma(sP, sS, OmegaQ)
     
     LHs = sS.systemStates.LHSystem;
     DeLamAQ = sP.delam.DeLamAQ;
-    DeLamBQ = sP.delam.DeLamBQ;
+    DeLamDQ = sP.delam.DeLamDQ;
     DeLamLQ = sP.delam.DeLamLQ;
     DeLamHQ = sP.delam.DeLamHQ;
     TT = sP.TT;
@@ -30,9 +31,9 @@ function [gammaQ, WNpr, WPpr] = calculateQuinoneGamma(sP, sS, OmegaQ)
     LamLQ = sP.lambdas.LamLQ;
     LamHQ = sP.lambdas.LamHQ;
     LamAQ = sP.lambdas.LamAQ;
-    LamBQ = sP.lambdas.LamBQ;
+    LamDQ = sP.lambdas.LamDQ;
     eA = sS.energyShifts.eA;
-    eB = sS.energyShifts.eB;
+    eD = sS.energyShifts.eD;
 
     QhL = zeros(NLevQ,NLevQ);
     QhH = zeros(NLevQ,NLevQ);
@@ -60,10 +61,10 @@ function [gammaQ, WNpr, WPpr] = calculateQuinoneGamma(sP, sS, OmegaQ)
     n1 = sS.systemStates.ASite;
     GamQA = WNel .* DeLamAQ .* (aa12 .* ePart1 .* (1 - n1) + aa12' .* ePart2 .* n1);
 
-    ePart1 = exp(-(OmegaQ + eB + LamBQ).^2./(4*LamBQ*TT));
-    ePart2 = exp(-(OmegaQ - eB + LamBQ).^2./(4*LamAQ*TT));
+    ePart1 = exp(-(OmegaQ + eD + LamDQ).^2./(4*LamDQ*TT));
+    ePart2 = exp(-(OmegaQ - eD + LamDQ).^2./(4*LamAQ*TT));
     n2 = sS.systemStates.DSite;
-    GamQB = WPel .* DeLamBQ .* (aa12 .* ePart1 .* (1 - n2) + aa12' .* ePart2 .* n2);
+    GamQD = WPel .* DeLamDQ .* (aa12 .* ePart1 .* (1 - n2) + aa12' .* ePart2 .* n2);
 
     % LH-to-Q relaxation matrix, NLevQ X NLevQ
     % GamQLH = WPel.*(DeLamL1*QhL1 + DeLamL2*QhL2) + WNel.*(DeLamH1*QhH1 + DeLamH2*QhH2);
@@ -94,6 +95,6 @@ function [gammaQ, WNpr, WPpr] = calculateQuinoneGamma(sP, sS, OmegaQ)
     % Quinone relaxation matrix due to coupling to leads
     GamQNP = WNpr .* GamQN + WPpr .* GamQP;
     % Total quinone relaxation matrix
-    gammaQ = GamQA + GamQB + GamQLH + GamQNP;
+    gammaQ = GamQA + GamQD + GamQLH + GamQNP;
     gammaQ = gammaQ .* sP.meVtoTime;
 end
