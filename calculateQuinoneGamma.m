@@ -54,7 +54,7 @@ function [gammaQ, WNpr, WPpr] = calculateQuinoneGamma(sP, sS, OmegaQ)
     WPel = exp(-2 * abs(xQ - x0) / delta);
     WNel = exp(-2 * abs(xQ + x0) / delta);
     
-    % contributions of A and D to Quinone evolution
+    % contributions of A and B to Quinone evolution
     ePart1 = exp(-(OmegaQ + eA + LamAQ).^2./(4 * LamAQ * TT));
     ePart2 = exp(-(OmegaQ - eA + LamAQ).^2./(4 * LamAQ * TT));
     n1 = sS.systemStates.ASite;
@@ -62,7 +62,7 @@ function [gammaQ, WNpr, WPpr] = calculateQuinoneGamma(sP, sS, OmegaQ)
 
     ePart1 = exp(-(OmegaQ + eB + LamBQ).^2./(4*LamBQ*TT));
     ePart2 = exp(-(OmegaQ - eB + LamBQ).^2./(4*LamAQ*TT));
-    n2 = sS.systemStates.DSite;
+    n2 = sS.systemStates.BSite;
     GamQB = WPel .* DeLamBQ .* (aa12 .* ePart1 .* (1 - n2) + aa12' .* ePart2 .* n2);
 
     % LH-to-Q relaxation matrix, NLevQ X NLevQ
