@@ -1,4 +1,4 @@
-function sS0 = setSystemInitialState(VoltageIdx, SDChainIdx, sP)
+function sS0 = setSystemInitialState(Voltage, SDChain, sP)
     %% System state
     field1 = 'systemStates';
     % A-site state
@@ -33,8 +33,8 @@ function sS0 = setSystemInitialState(VoltageIdx, SDChainIdx, sP)
     % Source-Drain (electrons) 
     muSDPlus = 1620;
     field3 = 'chemicalPotentials';
-    f1 = 'S'; v1 = 0.5 * (muSDPlus + sP.SDChain(SDChainIdx));
-    f2 = 'D'; v2 = 0.5 * (muSDPlus - sP.SDChain(SDChainIdx));
+    f1 = 'S'; v1 = 0.5 * (muSDPlus + SDChain);
+    f2 = 'D'; v2 = 0.5 * (muSDPlus - SDChain);
     f3 = 'N'; v3 = -sP.dM / 2;
     f4 = 'P'; v4 = sP.dM / 2;
     value3 = struct(f1, v1, f2, v2, f3, v3, f4, v4);
@@ -42,8 +42,8 @@ function sS0 = setSystemInitialState(VoltageIdx, SDChainIdx, sP)
     %% Membrane potentials
     field4 = 'membranePotentials';
     f1 = 'dV'; v1 = 20;
-    f2 = 'VN'; v2 = 0.5 * (sP.VSet(VoltageIdx) - v1);
-    f3 = 'VP'; v3 = 0.5 * (sP.VSet(VoltageIdx) + v1);
+    f2 = 'VN'; v2 = 0.5 * (Voltage - v1);
+    f3 = 'VP'; v3 = 0.5 * (Voltage + v1);
     value4 = struct(f1, v1, f2, v2, f3, v3);
     
     %% Energy shifts of A,B,L,H energies due to NP field gradient

@@ -8,7 +8,9 @@ function [] = main()
     QYield = zeros(numberOfSDChains, 1);
     EFQ    = zeros(numberOfSDChains, 1);
     for j = 1:numberOfSDChains
-        sS0 = setSystemInitialState(1, j, sP);
+        voltage = sP.VSet(1);
+        SDChain = sP.SDChain(j);
+        sS0 = setSystemInitialState(voltage, SDChain, sP);
 
         [dynamicsOutput, cumulativeOutput] = runSimulation(sP, sS0);
         cumulativeOutput
