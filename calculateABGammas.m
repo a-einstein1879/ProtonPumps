@@ -1,5 +1,5 @@
 function [gammaA, gammaB] = calculateABGammas(sS, sP, OmegaQ)
-    % Q -> A, Q -> D, S -> A, D -> B
+    % Q -> A, Q -> B, S -> A, B -> D
     % Contribution of Quinone to RC relaxation rate
     xQ = sS.quinonePosition;
     Qs = sS.systemStates.Quinone;
@@ -11,19 +11,19 @@ function [gammaA, gammaB] = calculateABGammas(sS, sP, OmegaQ)
     aa12 = abs(a1).^2 + abs(a2).^2;
     
     eA = sS.energyShifts.eA;
-    eD = sS.energyShifts.eD;
+    eB = sS.energyShifts.eB;
     LamAQ = sP.lambdas.LamAQ;
-    LamDQ = sP.lambdas.LamDQ;
+    LamBQ = sP.lambdas.LamBQ;
     
     % Sums in formula Feb/3/2011/A-11 for "0 -> 1" and "1 -> 0"
     % transitions to A and D sites
     PhA = zeros(NLevRC, NLevRC);
-    PhD = zeros(NLevRC, NLevRC);
+    PhB = zeros(NLevRC, NLevRC);
     PhA(1,2) = sum((aa12' .* exp(-(OmegaQ - eA + LamAQ).^2./(4 * LamAQ * sP.TT))) * Qs);
     PhA(2,1) = sum((aa12  .* exp(-(OmegaQ + eA + LamAQ).^2./(4 * LamAQ * sP.TT))) * Qs);
 
-    PhD(1,2) = sum((aa12' .* exp(-(OmegaQ - eD + LamDQ).^2./(4 * LamDQ * sP.TT))) * Qs);
-    PhD(2,1) = sum((aa12  .* exp(-(OmegaQ + eD + LamDQ).^2./(4 * LamDQ * sP.TT))) * Qs);
+    PhB(1,2) = sum((aa12' .* exp(-(OmegaQ - eB + LamBQ).^2./(4 * LamBQ * sP.TT))) * Qs);
+    PhB(2,1) = sum((aa12  .* exp(-(OmegaQ + eB + LamBQ).^2./(4 * LamBQ * sP.TT))) * Qs);
 
     % dependence of tunneling rates Q-RC (electrons) on change of
     % position
@@ -35,9 +35,9 @@ function [gammaA, gammaB] = calculateABGammas(sS, sP, OmegaQ)
     WPel = exp(-2 * abs(xQ - x0) / delta);
 
     gamAQ = WNel .* sP.delam.DeLamAQ .* PhA;
-    gamDQ = WPel .* sP.delam.DeLamDQ .* PhD;
+    gamBQ = WPel .* sP.delam.DeLamBQ .* PhB;
 
     % Total evolution of RC (gammas for evolution of A and D sites)
     gammaA = (gamAQ + sS.gammas.GamSA) .* sP.meVtoTime;
-    gammaB = (gamDQ + sS.gammas.GamDB) .* sP.meVtoTime;
+    gammaB = (gamBQ + sS.gammas.GamBD) .* sP.meVtoTime;
 end
