@@ -1,4 +1,4 @@
-function [gammaA, gammaB] = calculateABGammas(sS, sP, OmegaQ)
+function [gammaA, gammaB] = calculateFirstABGammas(sS, sP, OmegaQ)
     % Q1 -> A1, Q1 -> B1, S -> A1, B1 -> L2
     % Contribution of first Quinone to RC relaxation rate
     xQ = sS.quinone1Position;

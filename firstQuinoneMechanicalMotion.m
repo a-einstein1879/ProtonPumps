@@ -1,4 +1,4 @@
-function deltaX = quinoneMechanicalMotion(sS, sP)
+function deltaX = firstQuinoneMechanicalMotion(sS, sP)
     % First quinone mechanical motion with potentials and stochastic force
     % average value of quinone charge squared
     qqQ = diag(sS.qqQ1)' * sS.systemStates.Quinone1;

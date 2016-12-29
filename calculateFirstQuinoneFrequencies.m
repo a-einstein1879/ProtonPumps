@@ -1,4 +1,4 @@
-function OmegaQ = calculateQuinoneFrequencies(sP, sS)
+function OmegaQ = calculateFirstQuinoneFrequencies(sP, sS)
     % Change of energy levels of first quinone electrons and protons
     % that happen due to effects of surface potential (transmembrane voltage)
     % e - electron, E - proton. Q - first quinone

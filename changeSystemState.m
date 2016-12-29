@@ -24,7 +24,7 @@ function sS = changeSystemState(sS, sP, gammaA, gammaB, gammaLH, gammaQ)
     end
 
     % Change of first Quinone position
-    deltaX = quinoneMechanicalMotion(sS, sP);
+    deltaX = firstQuinoneMechanicalMotion(sS, sP);
 
     sS.systemStates.A1Site    = sS.systemStates.A1Site   + dAState  * sP.dt;
     sS.systemStates.B1Site    = sS.systemStates.B1Site   + dBState  * sP.dt;

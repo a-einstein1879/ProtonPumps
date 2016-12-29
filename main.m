@@ -55,13 +55,13 @@ function [dynamicsOutput, cumulativeOutput] = runSimulation(sP, sS)
     
     f17 = 'nL2';            v17 = zeros(1, sP.nOS);
     for time = 2:sP.nOS
-        OmegaQ = calculateQuinoneFrequencies(sP, sS);
+        OmegaQ = calculateFirstQuinoneFrequencies(sP, sS);
         
-        [gammaA, gammaB] = calculateABGammas(sS, sP, OmegaQ);
+        [gammaA, gammaB] = calculateFirstABGammas(sS, sP, OmegaQ);
         
-        gammaLH = calculateLHGamma(sP, sS, OmegaQ);
+        gammaLH = calculateLHSystemGamma(sP, sS, OmegaQ);
         
-        [gammaQ, WNpr, WPpr] = calculateQuinoneGamma(sP, sS, OmegaQ);
+        [gammaQ, WNpr, WPpr] = calculateFirstQuinoneGamma(sP, sS, OmegaQ);
         
 %        OmegaQ
 %        gammaA
