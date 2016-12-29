@@ -16,7 +16,7 @@ function sS0 = setSystemInitialState(Voltage, SDChain, sP)
     % First quinone state
     % First quinone initial state (from 1 to 16) (Q1-basis on Feb/2/2011/A-6)
     MQ1 = 1;
-    f5 = 'Quinone1'; v5 = zeros(sP.numberOfLevels.Q, 1);
+    f5 = 'Quinone1'; v5 = zeros(sP.numberOfLevels.Q1, 1);
     v5(MQ1) = 1;
     % LH-system state
     % LH system at t=0 (from 1 to 4)(LH-basis on Feb/2/2011/A-5)
@@ -27,7 +27,7 @@ function sS0 = setSystemInitialState(Voltage, SDChain, sP)
     
     %% First quinone position
     % initial position of first Quinone on the N-side on membrane
-    field2 = 'quinone1Position'; value2 = -sP.qMM.x0;
+    field2 = 'quinone1Position'; value2 = -sP.q1MM.x0;
     
     %% Chemical potentials
     % Source-L2 (electrons) 
@@ -49,16 +49,16 @@ function sS0 = setSystemInitialState(Voltage, SDChain, sP)
     %% Energy shifts of A,B,L,H energies due to NP field gradient
     field5 = 'energyShifts';
     % eA1 = eA1 - VN
-    f1 = 'eA1'; v1 = sP.energyLevels.eA - value4.VN;
+    f1 = 'eA1'; v1 = sP.energyLevels.eA1 - value4.VN;
     % eD1 = eB1 + VP
-    f2 = 'eB1'; v2 = sP.energyLevels.eB + value4.VP;
+    f2 = 'eB1'; v2 = sP.energyLevels.eB1 + value4.VP;
     % eH1 = eH1 - VN
-    f3 = 'eH1'; v3 = sP.energyLevels.eH - value4.VN;
+    f3 = 'eH1'; v3 = sP.energyLevels.eH1 - value4.VN;
     % eL1 = eL1 + VP
-    f4 = 'eL1'; v4 = sP.energyLevels.eL + value4.VP;
+    f4 = 'eL1'; v4 = sP.energyLevels.eL1 + value4.VP;
     % EQ1 = 1.5 * Uep - 0.5 * Up + 0.5 * (VP - VN) + 
     % + 0.5 * (muN + muP) - 25
-    f5 = 'EQ1'; v5 = 1.5 * sP.Uep - 0.5 * sP.potentials.Up + ...
+    f5 = 'EQ1'; v5 = 1.5 * sP.Uep - 0.5 * sP.columbQuinone1.Up + ...
         0.5 * (value4.VP - value4.VN) + 0.5 * (value3.N + value3.P) - 25;
     value5 = struct(f1, v1, f2, v2, f3, v3, f4, v4, f5, v5);
     
@@ -67,18 +67,18 @@ function sS0 = setSystemInitialState(Voltage, SDChain, sP)
     % ??????????????
     % Fermi distribution
     % fSeA1 = 1./( exp((eA-muS)/TT) + 1 )
-    f1 = 'fSeA1'; v1 = 1 ./ (exp((value5.eA1 - value3.S) / sP.TT) + 1);
+    f1 = 'fSeA1';  v1 = 1 ./ (exp((value5.eA1 - value3.S) / sP.TT) + 1);
     % fB1eL2 = 1./( exp((eD-muD)/TT) + 1 )
     f2 = 'fB1eL2'; v2 = 1 ./ (exp((value5.eB1 - value3.L2) / sP.TT) + 1);
 
     % normed gammas
     GamSA1 = zeros(2,2); GamB1L2 = zeros(2,2);
-    GamSA1(1,2) = sP.gammas.gamS .* (1 - v1);
-    GamSA1(2,1) = sP.gammas.gamS .* v1;
-    GamB1L2(1,2) = sP.gammas.gamD .* (1 - v2);
-    GamB1L2(2,1) = sP.gammas.gamD .* v2;
-    f3 = 'GamSA'; v3 = GamSA1;
-    f4 = 'GamBD'; v4 = GamB1L2;
+    GamSA1(1,2)  = sP.gammas.gamS  .* (1 - v1);
+    GamSA1(2,1)  = sP.gammas.gamS  .* v1;
+    GamB1L2(1,2) = sP.gammas.gamL2 .* (1 - v2);
+    GamB1L2(2,1) = sP.gammas.gamL2 .* v2;
+    f3 = 'GamSA1';  v3 = GamSA1;
+    f4 = 'GamB1L2'; v4 = GamB1L2;
     
     value6 = struct(f1, v1, f2, v2, f3, v3, f4, v4);
     
@@ -89,24 +89,29 @@ function sS0 = setSystemInitialState(Voltage, SDChain, sP)
     % + Up * N1 * N2 - u11 * n1 * N1 - u12 * n1 * N2 - ...
     % - u21 * n2 * N1 - u22 * n2 * N2
     f1 = 'HQ10';
-    n1 = sP.populationOperators.n1;
-    n2 = sP.populationOperators.n2;
-    N1 = sP.populationOperators.N1;
-    N2 = sP.populationOperators.N2;
-    nL1 = sP.populationOperators.nL;
-    nH1 = sP.populationOperators.nH;
-    v1 = ( n1 + n2 ) * sP.energyLevels.eQ + ...
-         ( N1 + N2 ) * value5.EQ1 + ...
-           n1 * n2   * sP.potentials.ue + ...
-           N1 * N2   * sP.potentials.Up - ...
-           n1 * N1   * sP.potentials.u11 - ...
-           n1 * N2   * sP.potentials.u12 - ...
-           n2 * N1   * sP.potentials.u21 - ...
-           n2 * N2   * sP.potentials.u22;
+    n1 = sP.populationOperators.Q1n1;
+    n2 = sP.populationOperators.Q1n2;
+    N1 = sP.populationOperators.Q1N1;
+    N2 = sP.populationOperators.Q1N2;
+    nL1 = sP.populationOperators.nL1;
+    nH1 = sP.populationOperators.nH1;
+    
+    eQ  = sP.energyLevels.eQ1;
+    ue  = sP.columbQuinone1.ue;
+    Up  = sP.columbQuinone1.Up;
+    u11 = sP.columbQuinone1.u11;
+    u12 = sP.columbQuinone1.u12;
+    u21 = sP.columbQuinone1.u21;
+    u22 = sP.columbQuinone1.u22;
+    uLH = sP.columbQuinone1.uLH;
+    v1 = ( n1 + n2 ) * eQ + ( N1 + N2 ) * value5.EQ1 + ...
+           n1 * n2 * ue  + N1 * N2 * Up - ...
+           n1 * N1 * u11 - n1 * N2 * u12 - ...
+           n2 * N1 * u21 - n2 * N2 * u22;
     % Hamiltonian HLH
     % HLH0 = eL1*nL1 + eH1*nH1 + uLH*nL1*nH1
     f2 = 'HLH0';
-    v2 = nL1 * value5.eL1 + nH1 * value5.eH1 + nL1 * nH1 * sP.potentials.uLH;
+    v2 = nL1 * value5.eL1 + nH1 * value5.eH1 + nL1 * nH1 * uLH;
     % energy spectrum of LH system
     f3 = 'EnLH'; v3 = diag(v2);
     EnLHd = repmat(v3, 1, sP.numberOfLevels.LH);

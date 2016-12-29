@@ -1,38 +1,34 @@
 function sP = setSystemParameters()
     %% Number of each system levels
-    NLevQ = 16;
+    NLevQ1 = 16;
     NLevLH = 4;
     NLevRC = 2;
     
     field1 = 'numberOfLevels';
-    % number of basis electron/proton states in a Quinone
+    % number of basis electron/proton states in a first Quinone
     % 4 particles can be or not be there, so 2^4 = 16
-    f1 = 'Q'; v1 = NLevQ;
+    f1 = 'Q1'; v1 = NLevQ1;
     
     % L-H (elements of Q-Cycle): two electron sites, coupled to each other and
-    % to e-sites 1,2 of the Quinone; 
+    % to e-sites 1,2 of the first Quinone; 
     % Together: 4 basis states for LH system (Feb/2/2011/A-5)
     f2 = 'LH'; v2 = NLevLH;
     
-    % number of basis states for A and for D separately
-    % 1 electron can be or not be in both A and D
+    % number of basis states for A1 and for D1 separately
+    % 1 electron can "be" or "not be" in both A1 and D1
     f3 = 'RC'; v3 = NLevRC;
     
-    % total number of equations for populations of sites
-    % NEq = NLevQ + NLevLH + NLevRC
-    f4 = 'NEq'; v4 = NLevQ + NLevLH + NLevRC;
-    
-    value1 = struct(f1, v1, f2, v2, f3, v3, f4, v4);
+    value1 = struct(f1, v1, f2, v2, f3, v3);
     
     %% State matrices
     % CA stands for creation/annihilation
     field2 = 'CAOperators';
     
-    % Quinone matrices
+    % First Quinone matrices
     % creation and annihilation operators for 2 electrons (a)
-    % and 2 protons (b) in Quinone
-    a1 = zeros(NLevQ, NLevQ); a2 = zeros(NLevQ, NLevQ); 
-    b1 = zeros(NLevQ, NLevQ); b2 = zeros(NLevQ, NLevQ); 
+    % and 2 protons (b) in the first Quinone
+    a1 = zeros(NLevQ1, NLevQ1); a2 = zeros(NLevQ1, NLevQ1); 
+    b1 = zeros(NLevQ1, NLevQ1); b2 = zeros(NLevQ1, NLevQ1); 
 
     a1(1,2)=1; a1(3,4)=1; a1(5,8)=1; a1(9,10)=1; a1(6,11)=1;
     a1(12,13)=1; a1(7,14)=1; a1(15,16)=1;
@@ -46,47 +42,47 @@ function sP = setSystemParameters()
     b2(1,6)=1; b2(5,7)=-1; b2(2,11)=1; b2(3,12)=1; b2(4,13)=1; 
     b2(8,14)=-1; b2(9,15)=-1; b2(10,16)=-1;
 
-    f1 = 'a1';  v1 = a1;
-    f2 = 'a2';  v2 = a2;
-    f3 = 'b1';  v3 = b1;
-    f4 = 'b2';  v4 = b2;
+    f1 = 'Q1a1';  v1 = a1;
+    f2 = 'Q1a2';  v2 = a2;
+    f3 = 'Q1b1';  v3 = b1;
+    f4 = 'Q1b2';  v4 = b2;
     
-    % LH matrices
+    % LH-system matrices
     aL = zeros(NLevLH,NLevLH); aH = zeros(NLevLH,NLevLH);
     aL(1,2)=1; aL(3,4)=1;
     aH(1,3)=1; aH(2,4)=-1;
     
-    f5 = 'aL'; v5 = aL;
-    f6 = 'aH'; v6 = aH;
+    f5 = 'aL1'; v5 = aL;
+    f6 = 'aH1'; v6 = aH;
     
     value2 = struct(f1, v1, f2, v2, f3, v3, f4, v4, f5, v5, f6, v6);
     
     %% Population operators
     field3 = 'populationOperators';
-    % Quinone electron and proton populations
+    % First quinone electron and proton populations
     % n1 = a1' * a1
-    f1 = 'n1'; v1 = a1' * a1;
+    f1 = 'Q1n1'; v1 = a1' * a1;
     % n2 = a2' * a2
-    f2 = 'n2'; v2 = a2' * a2;
+    f2 = 'Q1n2'; v2 = a2' * a2;
     % N1 = b1' * b1
-    f3 = 'N1'; v3 = b1' * b1;
+    f3 = 'Q1N1'; v3 = b1' * b1;
     % N2 = b2' * b2
-    f4 = 'N2'; v4 = b2' * b2;
+    f4 = 'Q1N2'; v4 = b2' * b2;
     
-    % LH system populations
+    % LH-system populations
     % nL = aL' * aL
-    f5 = 'nL'; v5 = aL' * aL;
+    f5 = 'nL1'; v5 = aL' * aL;
     % nH = aH' * aH
-    f6 = 'nH'; v6 = aH' * aH;
+    f6 = 'nH1'; v6 = aH' * aH;
     
     value3 = struct(f1, v1, f2, v2, f3, v3, f4, v4, f5, v5, f6, v6);
     
     %% Transfer distances
     field4 = 'transferDistances';
-    % proton transfer length, in nm; Q-to N or to P-side
-    f1 = 'qToN'; v1 = 0.25;
-    % electron transfer length; Q-to A or B; and Q-to L/H
-    f2 = 'qToAB'; v2 = 0.25;
+    % proton transfer length, in nm; Q1-to N or to P-side
+    f1 = 'q1ToN'; v1 = 0.25;
+    % electron transfer length; Q1-to A1 or B1; and Q1-to L1/H1
+    f2 = 'q1ToAB1'; v2 = 0.25;
     value4 = struct(f1, v1, f2, v2);
     
     %% Some general parameters
@@ -119,17 +115,16 @@ function sP = setSystemParameters()
     
     %% Tunneling amplitudes in mEv
     field21 = 'tunnelingAmplitudes';
-    f1 = 'dR';  v1 = 1;
-    f2 = 'dAQ'; v2 = 0.1 * v1;
-    f3 = 'dLQ'; v3 = 0.06 * v1;
-    f4 = 'dLH'; v4 = 0.1 * v1;
-    f5 = 'dBQ'; v5 = v2;
-    f6 = 'dHQ'; v6 = v3;
+    f1 = 'dR';    v1 = 1;
+    f2 = 'dA1Q1'; v2 = 0.1  * v1;
+    f3 = 'dL1Q1'; v3 = 0.06 * v1;
+    f4 = 'dL1H1'; v4 = 0.1  * v1;
+    f5 = 'dB1Q1'; v5 = v2;
+    f6 = 'dH1Q1'; v6 = v3;
     value21 = struct(f1, v1, f2, v2, f3, v3, f4, v4, f5, v5, f6, v6);
     
-    %% Potentials
-    field22 = 'potentials';
-    % Coulomb energies in Quinone
+    %% Coulomb energies in first Quinone
+    field22 = 'columbQuinone1';
     % electron/proton energies in quinone
     f1 = 'Up'; v1 = value17 / 8;
     %(5/8)*Uep; %500;
@@ -145,51 +140,51 @@ function sP = setSystemParameters()
     %% Energy levels
     field23 = 'energyLevels';
     % Lambda for energy levels only
-    LamLQ = 60;
-    LamLH = 140; % 260 - 2 * LamLQ
-    LamAQ = 50;
-    LamHQ = LamLQ; %100;%200;
-    LamBQ = LamAQ; %200;%200;
+    LamL1Q1 = 60;
+    LamL1H1 = 140; % 260 - 2 * LamL1Q1
+    LamA1Q1 = 50;
+    LamH1Q1 = LamL1Q1; %100;%200;
+    LamB1Q1 = LamA1Q1; %200;%200;
     
     % Parameters: These are energy^(0)
-    f1 = 'eB'; v1 = 0;
+    f1 = 'eB1'; v1 = 0;
     % eQ = eB + 2 * Uep - ue + LamDQ - 50
-    f2 = 'eQ'; v2 = v1 + 2 * value17 - value22.ue + LamBQ - 50;
+    f2 = 'eQ1'; v2 = v1 + 2 * value17 - value22.ue + LamB1Q1 - 50;
     % eH = eQ + LamHQ; % - alph*uLH;
-    f3 = 'eH'; v3 = v2 + LamHQ;
+    f3 = 'eH1'; v3 = v2 + LamH1Q1;
     % eL = eQ - LamLQ; % - alph*uLH;
-    f4 = 'eL'; v4 = v2 - LamLQ;
+    f4 = 'eL1'; v4 = v2 - LamL1Q1;
     % eA = eD + 2*Uep; % + LamDQ;% + LamAQ;
-    f5 = 'eA'; v5 = v1 + 2 * value17;
+    f5 = 'eA1'; v5 = v1 + 2 * value17;
     value23 = struct(f1, v1, f2, v2, f3, v3, f4, v4, f5, v5);
     
     %% REAL Lambdas
     field24 = 'lambdas';
-    f1 = 'LamLQ'; v1 = 100;
-    f2 = 'LamLH'; v2 = 250;
-    f3 = 'LamAQ'; v3 = 100;
-    % LamHQ = LamLQ
-    f4 = 'LamHQ'; v4 = v1;
+    f1 = 'LamL1Q1'; v1 = 100;
+    f2 = 'LamL1H1'; v2 = 250;
+    f3 = 'LamA1Q1'; v3 = 100;
+    % LamH1Q1 = LamL1Q1
+    f4 = 'LamH1Q1'; v4 = v1;
     % LamDQ = LamAQ
-    f5 = 'LamBQ'; v5 = v3;
+    f5 = 'LamB1Q1'; v5 = v3;
     % ??????????????????????
     f6 = 'LimNum'; v6 = 0.005;
     value24 = struct(f1, v1, f2, v2, f3, v3, f4, v4, f5, v5, f6, v6);
     
     %% Gammas
     field25 = 'gammas';
-    % Electron tunneling to Source/Drain
+    % Electron tunneling to Source/L2
     f1 = 'gamS'; v1 = 0.00001*10;
-    % gamD = gamS
-    f2 = 'gamD'; v2 = v1;
+    % gamL2 = gamS
+    f2 = 'gamL2'; v2 = v1;
     % Proton rates for Quinone-to-(N/P membrane sides) transitions, in meV
     f3 = 'gamN'; v3 = 0.001*2;
     % GamP = GamN
     f4 = 'gamP'; v4 = v3;
     value25 = struct(f1, v1, f2, v2, f3, v3, f4, v4);
     
-    %% Quinone mechanical motion (diffusion)
-    field26 = 'qMM';
+    %% First quinone mechanical motion (diffusion)
+    field26 = 'q1MM';
     % 2 nm, x = -x0 (N-side); x = + x0 (P-side of membrane)
     f1 = 'x0';                      v1 = 2;
     f2 = 'DifCoef0';                v2 = 0.08;
@@ -238,19 +233,19 @@ function sP = setSystemParameters()
     
     %% Delam matrices
     field27 = 'delam';
-    % Quinone-RC transitions, Feb/3/2011/A-3,4
+    % First Quinone-RC transitions, Feb/3/2011/A-3,4
     % root coefficients in A.11 (appendix)
-    % DeLamAQ = abs(dAQ).^2 * sqrt(pi / (LamAQ * TT))
-    f1 = 'DeLamAQ'; v1 = abs(value21.dAQ).^2 * sqrt(pi / (value24.LamAQ * value20));
-    % DeLamBQ = abs(dBQ).^2 * sqrt(pi / (LamBQ * TT))
-    f2 = 'DeLamBQ'; v2 = abs(value21.dBQ).^2 * sqrt(pi / (value24.LamBQ * value20));
+    % DeLamA1Q1 = abs(dA1Q1).^2 * sqrt(pi / (LamA1Q1 * TT))
+    f1 = 'DeLamA1Q1'; v1 = abs(value21.dA1Q1).^2 * sqrt(pi / (value24.LamA1Q1 * value20));
+    % DeLamB1Q1 = abs(dB1Q1).^2 * sqrt(pi / (LamB1Q1 * TT))
+    f2 = 'DeLamB1Q1'; v2 = abs(value21.dB1Q1).^2 * sqrt(pi / (value24.LamB1Q1 * value20));
 
     % Quinone-LH transitions
     % root coefficients in A.4 (appendix)
-    % DeLamLQ = abs(dLQ).^2 * sqrt(pi / (LamLQ * TT))
-    f3 = 'DeLamLQ'; v3 = abs(value21.dLQ).^2 * sqrt(pi / (value24.LamLQ * value20));
-    % DeLamHQ = abs(dHQ).^2 * sqrt(pi / (LamHQ * TT))
-    f4 = 'DeLamHQ'; v4 = abs(value21.dHQ).^2 * sqrt(pi / (value24.LamHQ * value20));
+    % DeLamL1Q1 = abs(dL1Q1).^2 * sqrt(pi / (LamL1Q1 * TT))
+    f3 = 'DeLamL1Q1'; v3 = abs(value21.dL1Q1).^2 * sqrt(pi / (value24.LamL1Q1 * value20));
+    % DeLamH1Q1 = abs(dH1Q1).^2 * sqrt(pi / (LamH1Q1 * TT))
+    f4 = 'DeLamH1Q1'; v4 = abs(value21.dH1Q1).^2 * sqrt(pi / (value24.LamH1Q1 * value20));
     
     value27 = struct(f1, v1, f2, v2, f3, v3, f4, v4);
 

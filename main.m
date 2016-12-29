@@ -77,12 +77,12 @@ function [dynamicsOutput, cumulativeOutput] = runSimulation(sP, sS)
         v1(time + 1) = sS.quinone1Position;
         v2(time + 1) = sS.systemStates.A1Site;
         v3(time + 1) = sS.systemStates.B1Site;
-        v4(time + 1) = sum(sP.populationOperators.nL * sS.systemStates.LHSystem);
-        v5(time + 1) = sum(sP.populationOperators.nH * sS.systemStates.LHSystem);
-        v6(time + 1) = sum(sP.populationOperators.n1 * sS.systemStates.Quinone1);
-        v7(time + 1) = sum(sP.populationOperators.n2 * sS.systemStates.Quinone1);
-        v8(time + 1) = sum(sP.populationOperators.N1 * sS.systemStates.Quinone1);
-        v9(time + 1) = sum(sP.populationOperators.N2 * sS.systemStates.Quinone1);
+        v4(time + 1) = sum(sP.populationOperators.nL1 * sS.systemStates.LHSystem);
+        v5(time + 1) = sum(sP.populationOperators.nH1 * sS.systemStates.LHSystem);
+        v6(time + 1) = sum(sP.populationOperators.Q1n1 * sS.systemStates.Quinone1);
+        v7(time + 1) = sum(sP.populationOperators.Q1n2 * sS.systemStates.Quinone1);
+        v8(time + 1) = sum(sP.populationOperators.Q1N1 * sS.systemStates.Quinone1);
+        v9(time + 1) = sum(sP.populationOperators.Q1N2 * sS.systemStates.Quinone1);
         v10(time + 1) = v8(time) - v8(time - 1) + v9(time) - v9(time - 1);
         v11(time + 1) = WNpr;
         v12(time + 1) = WPpr;
@@ -96,7 +96,7 @@ function [dynamicsOutput, cumulativeOutput] = runSimulation(sP, sS)
         end
         
         v13(time + 1) = sP.meVtoTime * sP.gammas.gamS * (v2(time) - sS.gammas.fSeA1);
-        v14(time + 1) = sP.meVtoTime * sP.gammas.gamD * (v3(time) - sS.gammas.fB1eL2);
+        v14(time + 1) = sP.meVtoTime * sP.gammas.gamL2 * (v3(time) - sS.gammas.fB1eL2);
         v17(time + 1) = sS.systemStates.L2Site;
     end
     

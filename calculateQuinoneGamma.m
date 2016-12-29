@@ -1,36 +1,36 @@
 function [gammaQ, WNpr, WPpr] = calculateQuinoneGamma(sP, sS, OmegaQ)
-    %% Calculate total gamma of quinone
+    %% Calculate total gamma of first quinone
     % GamQA + GamQD + GamQLH + GamQNP
-    % contribution of RC to Quinone evolution, Feb/3/2011/A-6
-    % contribution of LH system to Quinone evolution
-    NLevQ = sP.numberOfLevels.Q;
+    % contribution of RC to first Quinone evolution, Feb/3/2011/A-6
+    % contribution of LH system to first Quinone evolution
+    NLevQ = sP.numberOfLevels.Q1;
 
-    a1 = sP.CAOperators.a1;
-    a2 = sP.CAOperators.a2;
-    b1 = sP.CAOperators.b1;
-    b2 = sP.CAOperators.b2;
-    aL = sP.CAOperators.aL;
-    aH = sP.CAOperators.aH;
+    a1 = sP.CAOperators.Q1a1;
+    a2 = sP.CAOperators.Q1a2;
+    b1 = sP.CAOperators.Q1b1;
+    b2 = sP.CAOperators.Q1b2;
+    aL = sP.CAOperators.aL1;
+    aH = sP.CAOperators.aH1;
     aaL = abs(aL).^2;
     aaH = abs(aH).^2;
     aa12 = abs(a1).^2 + abs(a2).^2;
     bb12 = abs(b1).^2 + abs(b2).^2;
     
     LHs = sS.systemStates.LHSystem;
-    DeLamAQ = sP.delam.DeLamAQ;
-    DeLamBQ = sP.delam.DeLamBQ;
-    DeLamLQ = sP.delam.DeLamLQ;
-    DeLamHQ = sP.delam.DeLamHQ;
+    DeLamAQ = sP.delam.DeLamA1Q1;
+    DeLamBQ = sP.delam.DeLamB1Q1;
+    DeLamLQ = sP.delam.DeLamL1Q1;
+    DeLamHQ = sP.delam.DeLamH1Q1;
     TT = sP.TT;
     muN = sS.chemicalPotentials.N;
     muP = sS.chemicalPotentials.P;
     GamN = sP.gammas.gamN;
     GamP = sP.gammas.gamP;
     omegaLH = sS.hamiltonians.omegaLH;
-    LamLQ = sP.lambdas.LamLQ;
-    LamHQ = sP.lambdas.LamHQ;
-    LamAQ = sP.lambdas.LamAQ;
-    LamBQ = sP.lambdas.LamBQ;
+    LamLQ = sP.lambdas.LamL1Q1;
+    LamHQ = sP.lambdas.LamH1Q1;
+    LamAQ = sP.lambdas.LamA1Q1;
+    LamBQ = sP.lambdas.LamB1Q1;
     eA = sS.energyShifts.eA1;
     eB = sS.energyShifts.eB1;
 
@@ -49,8 +49,8 @@ function [gammaQ, WNpr, WPpr] = calculateQuinoneGamma(sP, sS, OmegaQ)
     end
     
     xQ = sS.quinone1Position;
-    x0 = sP.qMM.x0;
-    delta = sP.transferDistances.qToAB;
+    x0 = sP.q1MM.x0;
+    delta = sP.transferDistances.q1ToAB1;
     WPel = exp(-2 * abs(xQ - x0) / delta);
     WNel = exp(-2 * abs(xQ + x0) / delta);
     
@@ -84,14 +84,14 @@ function [gammaQ, WNpr, WPpr] = calculateQuinoneGamma(sP, sS, OmegaQ)
     GamQN = GamN.*bb12 - GamFN + GamFN';
     GamQP = GamP.*bb12 - GamFP + GamFP';
 
-    % dependence of tunneling rates Q-NP (protons) on change of
+    % dependence of tunneling rates Q1-NP (protons) on change of
     % position
     % to both: N and P sites
-    delta = sP.transferDistances.qToN;
+    delta = sP.transferDistances.q1ToN;
     WNpr = (exp((x0 + xQ) / delta) + 1) .^ (-2); % Near N-side (source of protons)
     WPpr = (exp((x0 - xQ) / delta) + 1) .^ (-2); % Near P-side (drain of protons)
 
-    % Quinone relaxation matrix due to coupling to leads
+    % First Quinone relaxation matrix due to coupling to leads
     GamQNP = WNpr .* GamQN + WPpr .* GamQP;
     % Total quinone relaxation matrix
     gammaQ = GamQA + GamQB + GamQLH + GamQNP;
