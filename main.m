@@ -96,6 +96,12 @@ function [dynamicsOutput, cumulativeOutput] = runSimulation(sP, sS)
         v14(time + 1) = sP.meVtoTime * sP.gammas.gamD * (v3(time) - sS.gammas.fBeD);
     end
     
+    fileID = fopen('wrongout.txt','w');
+    for time = 2:sP.nOS
+        fprintf(fileID, '%.2f\t%.2f\t%.2f\r\n', v1(time), v2(time), v3(time));
+    end
+    fclose(fileID);
+    
     dynamicsOutput = struct(f1, v1, f2, v2, f3, v3, f4, v4, ...
         f5, v5, f6, v6, f7, v7, f8, v8, f9, v9, f10, v10, ...
         f11, v11, f12, v12, f13, v13, f14, v14, f15, v15, f16, v16);
