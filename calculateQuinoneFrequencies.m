@@ -38,7 +38,7 @@ function OmegaQ = calculateQuinoneFrequencies(sP, sS)
     ExQCk = exp(xQ / sP.qMM.penaltyPotentialSlope);
     Ucharge = sP.qMM.penaltyPotentialHeight * ...
        (1 / ((ExQCk / sP.qMM.exCh) + 1) - 1 / ((ExQCk * sP.qMM.exCh) + 1));
-      
+    
     HQcharge = Ucharge * sS.qqQ;
     % Total Hamiltonian of Quinone (without tunnelings)
     HQA = sS.hamiltonians.HQ0 + HQcharge + HQx;

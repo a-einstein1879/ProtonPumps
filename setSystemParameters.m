@@ -85,7 +85,7 @@ function sP = setSystemParameters()
     field4 = 'transferDistances';
     % proton transfer length, in nm; Q-to N or to P-side
     f1 = 'qToN'; v1 = 0.25;
-    % electron transfer length; Q-to A or D; and Q-to L/H
+    % electron transfer length; Q-to A or B; and Q-to L/H
     f2 = 'qToAB'; v2 = 0.25;
     value4 = struct(f1, v1, f2, v2);
     
@@ -123,7 +123,7 @@ function sP = setSystemParameters()
     f2 = 'dAQ'; v2 = 0.1 * v1;
     f3 = 'dLQ'; v3 = 0.06 * v1;
     f4 = 'dLH'; v4 = 0.1 * v1;
-    f5 = 'dDQ'; v5 = v2;
+    f5 = 'dBQ'; v5 = v2;
     f6 = 'dHQ'; v6 = v3;
     value21 = struct(f1, v1, f2, v2, f3, v3, f4, v4, f5, v5, f6, v6);
     
@@ -149,12 +149,12 @@ function sP = setSystemParameters()
     LamLH = 140; % 260 - 2 * LamLQ
     LamAQ = 50;
     LamHQ = LamLQ; %100;%200;
-    LamDQ = LamAQ; %200;%200;
+    LamBQ = LamAQ; %200;%200;
     
     % Parameters: These are energy^(0)
-    f1 = 'eD'; v1 = 0;
-    % eQ = eD + 2 * Uep - ue + LamDQ - 50
-    f2 = 'eQ'; v2 = v1 + 2 * value17 - value22.ue + LamDQ - 50;
+    f1 = 'eB'; v1 = 0;
+    % eQ = eB + 2 * Uep - ue + LamDQ - 50
+    f2 = 'eQ'; v2 = v1 + 2 * value17 - value22.ue + LamBQ - 50;
     % eH = eQ + LamHQ; % - alph*uLH;
     f3 = 'eH'; v3 = v2 + LamHQ;
     % eL = eQ - LamLQ; % - alph*uLH;
@@ -171,7 +171,7 @@ function sP = setSystemParameters()
     % LamHQ = LamLQ
     f4 = 'LamHQ'; v4 = v1;
     % LamDQ = LamAQ
-    f5 = 'LamDQ'; v5 = v3;
+    f5 = 'LamBQ'; v5 = v3;
     % ??????????????????????
     f6 = 'LimNum'; v6 = 0.005;
     value24 = struct(f1, v1, f2, v2, f3, v3, f4, v4, f5, v5, f6, v6);
@@ -242,8 +242,8 @@ function sP = setSystemParameters()
     % root coefficients in A.11 (appendix)
     % DeLamAQ = abs(dAQ).^2 * sqrt(pi / (LamAQ * TT))
     f1 = 'DeLamAQ'; v1 = abs(value21.dAQ).^2 * sqrt(pi / (value24.LamAQ * value20));
-    % DeLamDQ = abs(dDQ).^2 * sqrt(pi / (LamDQ * TT))
-    f2 = 'DeLamDQ'; v2 = abs(value21.dDQ).^2 * sqrt(pi / (value24.LamDQ * value20));
+    % DeLamBQ = abs(dBQ).^2 * sqrt(pi / (LamBQ * TT))
+    f2 = 'DeLamBQ'; v2 = abs(value21.dBQ).^2 * sqrt(pi / (value24.LamBQ * value20));
 
     % Quinone-LH transitions
     % root coefficients in A.4 (appendix)

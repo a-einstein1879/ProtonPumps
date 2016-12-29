@@ -60,12 +60,20 @@ function [dynamicsOutput, cumulativeOutput] = runSimulation(sP, sS)
         
         [gammaQ, WNpr, WPpr] = calculateQuinoneGamma(sP, sS, OmegaQ);
         
+%        OmegaQ
+%        gammaA
+%        gammaB
+%        gammaLH
+%        gammaQ
+%        WNpr
+%        WPpr
+%        pause(10)
         sS = changeSystemState(sS, sP, gammaA, gammaB, gammaLH, gammaQ);
         
         %% Fill in the output array
         v1(time + 1) = sS.quinonePosition;
         v2(time + 1) = sS.systemStates.ASite;
-        v3(time + 1) = sS.systemStates.DSite;
+        v3(time + 1) = sS.systemStates.BSite;
         v4(time + 1) = sum(sP.populationOperators.nL * sS.systemStates.LHSystem);
         v5(time + 1) = sum(sP.populationOperators.nH * sS.systemStates.LHSystem);
         v6(time + 1) = sum(sP.populationOperators.n1 * sS.systemStates.Quinone);
@@ -85,7 +93,7 @@ function [dynamicsOutput, cumulativeOutput] = runSimulation(sP, sS)
         end
         
         v13(time + 1) = sP.meVtoTime * sP.gammas.gamS * (v2(time) - sS.gammas.fSeA);
-        v14(time + 1) = sP.meVtoTime * sP.gammas.gamD * (v3(time) - sS.gammas.fDeD);
+        v14(time + 1) = sP.meVtoTime * sP.gammas.gamD * (v3(time) - sS.gammas.fBeD);
     end
     
     dynamicsOutput = struct(f1, v1, f2, v2, f3, v3, f4, v4, ...
