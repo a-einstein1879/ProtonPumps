@@ -22,7 +22,7 @@ function gammaLH = calculateLHGamma(sP, sS, OmegaQ)
     LamLH = sP.lambdas.LamLH;
     dLH = sP.tunnelingAmplitudes.dLH;
     
-    Qs = sS.systemStates.Quinone;
+    Qs = sS.systemStates.Quinone1;
 
     PhL = zeros(NLevLH,NLevLH);
     PhH = zeros(NLevLH,NLevLH);
@@ -41,7 +41,7 @@ function gammaLH = calculateLHGamma(sP, sS, OmegaQ)
 
     % see Feb/3/2011/A-5, matrix NLevRC X NLevRC
     % gamLHQ = WPel.*(DeLamL1*PhL1 + DeLamL2*PhL2) + WNel.*(DeLamH1*PhH1 + DeLamH2*PhH2)
-    xQ = sS.quinonePosition;
+    xQ = sS.quinone1Position;
     x0 = sP.qMM.x0;
     delta = sP.transferDistances.qToAB;
     WPel = exp(-2 * abs(xQ - x0) / delta);

@@ -31,8 +31,8 @@ function [gammaQ, WNpr, WPpr] = calculateQuinoneGamma(sP, sS, OmegaQ)
     LamHQ = sP.lambdas.LamHQ;
     LamAQ = sP.lambdas.LamAQ;
     LamBQ = sP.lambdas.LamBQ;
-    eA = sS.energyShifts.eA;
-    eB = sS.energyShifts.eB;
+    eA = sS.energyShifts.eA1;
+    eB = sS.energyShifts.eB1;
 
     QhL = zeros(NLevQ,NLevQ);
     QhH = zeros(NLevQ,NLevQ);
@@ -48,7 +48,7 @@ function [gammaQ, WNpr, WPpr] = calculateQuinoneGamma(sP, sS, OmegaQ)
         end
     end
     
-    xQ = sS.quinonePosition;
+    xQ = sS.quinone1Position;
     x0 = sP.qMM.x0;
     delta = sP.transferDistances.qToAB;
     WPel = exp(-2 * abs(xQ - x0) / delta);
@@ -57,12 +57,12 @@ function [gammaQ, WNpr, WPpr] = calculateQuinoneGamma(sP, sS, OmegaQ)
     % contributions of A and B to Quinone evolution
     ePart1 = exp(-(OmegaQ + eA + LamAQ).^2./(4 * LamAQ * TT));
     ePart2 = exp(-(OmegaQ - eA + LamAQ).^2./(4 * LamAQ * TT));
-    n1 = sS.systemStates.ASite;
+    n1 = sS.systemStates.A1Site;
     GamQA = WNel .* DeLamAQ .* (aa12 .* ePart1 .* (1 - n1) + aa12' .* ePart2 .* n1);
 
     ePart1 = exp(-(OmegaQ + eB + LamBQ).^2./(4*LamBQ*TT));
     ePart2 = exp(-(OmegaQ - eB + LamBQ).^2./(4*LamAQ*TT));
-    n2 = sS.systemStates.BSite;
+    n2 = sS.systemStates.B1Site;
     GamQB = WPel .* DeLamBQ .* (aa12 .* ePart1 .* (1 - n2) + aa12' .* ePart2 .* n2);
 
     % LH-to-Q relaxation matrix, NLevQ X NLevQ

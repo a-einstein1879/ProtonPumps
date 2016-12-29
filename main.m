@@ -53,6 +53,7 @@ function [dynamicsOutput, cumulativeOutput] = runSimulation(sP, sS)
     f15 = 'dnN';            v15 = zeros(1, sP.nOS);
     f16 = 'dnP';            v16 = zeros(1, sP.nOS);
     
+    f17 = 'nL2';            v17 = zeros(1, sP.nOS);
     for time = 2:sP.nOS
         OmegaQ = calculateQuinoneFrequencies(sP, sS);
         
@@ -73,15 +74,15 @@ function [dynamicsOutput, cumulativeOutput] = runSimulation(sP, sS)
         sS = changeSystemState(sS, sP, gammaA, gammaB, gammaLH, gammaQ);
         
         %% Fill in the output array
-        v1(time + 1) = sS.quinonePosition;
-        v2(time + 1) = sS.systemStates.ASite;
-        v3(time + 1) = sS.systemStates.BSite;
+        v1(time + 1) = sS.quinone1Position;
+        v2(time + 1) = sS.systemStates.A1Site;
+        v3(time + 1) = sS.systemStates.B1Site;
         v4(time + 1) = sum(sP.populationOperators.nL * sS.systemStates.LHSystem);
         v5(time + 1) = sum(sP.populationOperators.nH * sS.systemStates.LHSystem);
-        v6(time + 1) = sum(sP.populationOperators.n1 * sS.systemStates.Quinone);
-        v7(time + 1) = sum(sP.populationOperators.n2 * sS.systemStates.Quinone);
-        v8(time + 1) = sum(sP.populationOperators.N1 * sS.systemStates.Quinone);
-        v9(time + 1) = sum(sP.populationOperators.N2 * sS.systemStates.Quinone);
+        v6(time + 1) = sum(sP.populationOperators.n1 * sS.systemStates.Quinone1);
+        v7(time + 1) = sum(sP.populationOperators.n2 * sS.systemStates.Quinone1);
+        v8(time + 1) = sum(sP.populationOperators.N1 * sS.systemStates.Quinone1);
+        v9(time + 1) = sum(sP.populationOperators.N2 * sS.systemStates.Quinone1);
         v10(time + 1) = v8(time) - v8(time - 1) + v9(time) - v9(time - 1);
         v11(time + 1) = WNpr;
         v12(time + 1) = WPpr;
@@ -94,19 +95,20 @@ function [dynamicsOutput, cumulativeOutput] = runSimulation(sP, sS)
             v16(time + 1) = - v10(time);
         end
         
-        v13(time + 1) = sP.meVtoTime * sP.gammas.gamS * (v2(time) - sS.gammas.fSeA);
-        v14(time + 1) = sP.meVtoTime * sP.gammas.gamD * (v3(time) - sS.gammas.fBeD);
+        v13(time + 1) = sP.meVtoTime * sP.gammas.gamS * (v2(time) - sS.gammas.fSeA1);
+        v14(time + 1) = sP.meVtoTime * sP.gammas.gamD * (v3(time) - sS.gammas.fB1eL2);
+        v17(time + 1) = sS.systemStates.L2Site;
     end
     
-    fileID = fopen('wrongout.txt','w');
+    fileID = fopen('testout.txt','w');
     for time = 2:sP.nOS
-        fprintf(fileID, '%.2f\t%.2f\t%.2f\r\n', v1(time), v2(time), v3(time));
+        fprintf(fileID, '%.2f\t%.2f\t%.2f\r\n', v1(time), v2(time), v17(time));
     end
     fclose(fileID);
     
     dynamicsOutput = struct(f1, v1, f2, v2, f3, v3, f4, v4, ...
         f5, v5, f6, v6, f7, v7, f8, v8, f9, v9, f10, v10, ...
-        f11, v11, f12, v12, f13, v13, f14, v14, f15, v15, f16, v16);
+        f11, v11, f12, v12, f13, v13, f14, v14, f15, v15, f16, v16, f17, v17);
     % Cumulative output
     f1 = 'nPside';
     tmpV = cumsum(v16);
@@ -121,7 +123,7 @@ function [dynamicsOutput, cumulativeOutput] = runSimulation(sP, sS)
     muP = sS.chemicalPotentials.P;
     muN = sS.chemicalPotentials.N;
     muS = sS.chemicalPotentials.S;
-    muD = sS.chemicalPotentials.D;
+    muD = sS.chemicalPotentials.L2;
     
     f4 = 'EFQ'; v4 = v3 .* (muP - muN) ./ (muS - muD);
     

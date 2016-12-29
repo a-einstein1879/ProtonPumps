@@ -2,7 +2,7 @@ function OmegaQ = calculateQuinoneFrequencies(sP, sS)
     % Change of energy levels of quinone electrons and protons
     % that happen due to effects of surface potential (transmembrane voltage)
     % e - electron, E - proton. Q - quinone
-    xQ = sS.quinonePosition;
+    xQ = sS.quinone1Position;
     x0 = sP.qMM.x0;
     VN = sS.membranePotentials.VN;
     VP = sS.membranePotentials.VP;
@@ -39,9 +39,9 @@ function OmegaQ = calculateQuinoneFrequencies(sP, sS)
     Ucharge = sP.qMM.penaltyPotentialHeight * ...
        (1 / ((ExQCk / sP.qMM.exCh) + 1) - 1 / ((ExQCk * sP.qMM.exCh) + 1));
     
-    HQcharge = Ucharge * sS.qqQ;
+    HQcharge = Ucharge * sS.qqQ1;
     % Total Hamiltonian of Quinone (without tunnelings)
-    HQA = sS.hamiltonians.HQ0 + HQcharge + HQx;
+    HQA = sS.hamiltonians.HQ10 + HQcharge + HQx;
         
     % Energy levels of basis states of Quinone (with xQ-dependence)
     EnQ = diag(HQA);

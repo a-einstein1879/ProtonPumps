@@ -1,8 +1,8 @@
 function [gammaA, gammaB] = calculateABGammas(sS, sP, OmegaQ)
     % Q -> A, Q -> B, S -> A, B -> D
     % Contribution of Quinone to RC relaxation rate
-    xQ = sS.quinonePosition;
-    Qs = sS.systemStates.Quinone;
+    xQ = sS.quinone1Position;
+    Qs = sS.systemStates.Quinone1;
     x0 = sP.qMM.x0;
     NLevRC = sP.numberOfLevels.RC;
     
@@ -10,8 +10,8 @@ function [gammaA, gammaB] = calculateABGammas(sS, sP, OmegaQ)
     a2 = sP.CAOperators.a2;
     aa12 = abs(a1).^2 + abs(a2).^2;
     
-    eA = sS.energyShifts.eA;
-    eB = sS.energyShifts.eB;
+    eA = sS.energyShifts.eA1;
+    eB = sS.energyShifts.eB1;
     LamAQ = sP.lambdas.LamAQ;
     LamBQ = sP.lambdas.LamBQ;
     

@@ -1,9 +1,9 @@
 function deltaX = quinoneMechanicalMotion(sS, sP)
     % Quinone mechanical motion with potentials and stochastic force
     % average value of quinone charge squared
-    qqQ = diag(sS.qqQ)' * sS.systemStates.Quinone;
+    qqQ = diag(sS.qqQ1)' * sS.systemStates.Quinone1;
     % ???????????????? these parameters should be renamed
-    xQ = sS.quinonePosition;
+    xQ = sS.quinone1Position;
     CVw = sP.qMM.CVw;
     ExW = sP.qMM.ExW;
     CVch = sP.qMM.CVch;

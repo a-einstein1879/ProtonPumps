@@ -3,3 +3,5 @@ QCycle10November16backup.m
 QCycleTestOutput.mat
 realout.txt
 wrongout.txt
+setSystemInitialState.asv
+*.txt

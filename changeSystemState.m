@@ -3,9 +3,9 @@ function sS = changeSystemState(sS, sP, gammaA, gammaB, gammaLH, gammaQ)
     NLevLH = sP.numberOfLevels.LH;
     
     % Change of state of A and D sites
-    nA = sS.systemStates.ASite;
+    nA = sS.systemStates.A1Site;
     dAState = gammaA(2, 1) .* (1 - nA) - gammaA(1, 2) .* nA;
-    nB = sS.systemStates.BSite;
+    nB = sS.systemStates.B1Site;
     dBState = gammaB(2, 1) .* (1 - nB) - gammaB(1, 2) .* nB;
 
     % Change of LH-system state
@@ -18,17 +18,17 @@ function sS = changeSystemState(sS, sP, gammaA, gammaB, gammaLH, gammaQ)
 
     % Change of Quinone state
     GamQM = sum(gammaQ);
-    ReLQ = gammaQ * sS.systemStates.Quinone;
+    ReLQ = gammaQ * sS.systemStates.Quinone1;
     dQState = zeros(NLevQ, 1);
     for j = 1:NLevQ
-        dQState(j) = - GamQM(j)*sS.systemStates.Quinone(j) + ReLQ(j); 
+        dQState(j) = - GamQM(j)*sS.systemStates.Quinone1(j) + ReLQ(j); 
     end
 
     deltaX = quinoneMechanicalMotion(sS, sP);
 
-    sS.systemStates.ASite    = sS.systemStates.ASite    + dAState  * sP.dt;
-    sS.systemStates.BSite    = sS.systemStates.BSite    + dBState  * sP.dt;
-    sS.systemStates.Quinone  = sS.systemStates.Quinone  + dQState  * sP.dt;
-    sS.systemStates.LHSystem = sS.systemStates.LHSystem + dLHState * sP.dt;
-    sS.quinonePosition       = sS.quinonePosition       + deltaX   * sP.dt;
+    sS.systemStates.A1Site    = sS.systemStates.A1Site   + dAState  * sP.dt;
+    sS.systemStates.B1Site    = sS.systemStates.B1Site   + dBState  * sP.dt;
+    sS.systemStates.Quinone1  = sS.systemStates.Quinone1 + dQState  * sP.dt;
+    sS.systemStates.LHSystem  = sS.systemStates.LHSystem + dLHState * sP.dt;
+    sS.quinone1Position       = sS.quinone1Position      + deltaX   * sP.dt;
 end
