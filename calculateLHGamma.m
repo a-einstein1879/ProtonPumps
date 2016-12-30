@@ -1,4 +1,4 @@
-function gammaLH = calculateLHSystemGamma(sP, sS, OmegaQ)
+function gammaLH = calculateLHGamma(sP, sS, OmegaQ)
     % Total gamma of LH system, is summ of
     % LH tunneling, LQ1 tunneling and HQ1 tunneling
     % Contribution of first Quinone to LH evolution
