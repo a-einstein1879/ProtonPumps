@@ -1,4 +1,4 @@
-function gammaQ = calculateQuinoneGamma(sP, sS, OmegaQ)
+function [gammaQ, WNpr, WPpr] = calculateQuinoneGamma(sP, sS, OmegaQ)
     %% Calculate total gamma of quinone
     % GamQA + GamQD + GamQLH + GamQNP
     % contribution of RC to Quinone evolution, Feb/3/2011/A-6
