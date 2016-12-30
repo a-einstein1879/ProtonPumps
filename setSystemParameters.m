@@ -98,12 +98,12 @@ function sP = setSystemParameters()
     % ????????????????????????
     field14 = 'dM'; value14 = 300;
     % ????????????????????????
-    field15 = 'SDChain'; value15 = [1370; 1395; 1420; 1445];
+    field15 = 'SDChain'; value15 = 1400;
     %value15 = [1220; 1245; 1270; 1295; 1320; 1345; 1370; 1395; 1420; 1445];
     % ????????????????????????
-    field16 = 'VSet'; value16 = [160; 260; 360];
-    % ????????????????????????
-    field17 = 'Uep'; value17 = 800;
+    field16 = 'VSet'; value16 = 160;
+    %[160; 260; 360];
+    field17 = 'EnToTime'; value17 = 1./152.0;
     
     %% Temperatures
     % temperature in Kelvin
@@ -124,19 +124,26 @@ function sP = setSystemParameters()
     value21 = struct(f1, v1, f2, v2, f3, v3, f4, v4, f5, v5, f6, v6);
     
     %% Coulomb energies in first Quinone
-    field22 = 'columbQuinone1';
+    field22a = 'columbQuinone1';
+    Uep = 800;
+    f0 = 'Uep'; v0 = Uep;
     % electron/proton energies in quinone
-    f1 = 'Up'; v1 = value17 / 8;
+    f1 = 'Up'; v1 = Uep / 8;
     %(5/8)*Uep; %500;
-    f2 = 'ue'; v2 = value17 * 0.5;
+    f2 = 'ue'; v2 = Uep * 0.5;
     % interaction energies
-    f3 = 'u11'; v3 = value17;
-    f4 = 'u12'; v4 = value17;
-    f5 = 'u21'; v5 = value17;
-    f6 = 'u22'; v6 = value17;
+    f3 = 'u11'; v3 = Uep;
+    f4 = 'u12'; v4 = Uep;
+    f5 = 'u21'; v5 = Uep;
+    f6 = 'u22'; v6 = Uep;
     f7 = 'uLH'; v7 = 240;
-    value22 = struct(f1, v1, f2, v2, f3, v3, f4, v4, f5, v5, f6, v6, f7, v7);
+    value22a = struct(f0, v0, f1, v1, f2, v2, f3, v3, f4, v4, f5, v5, f6, v6, f7, v7);
 
+    %% Columb energy in second Quinone
+    field22b = 'columbQuinone2';
+    f1 = 'u0'; v1 = 560;
+    value22b = struct(f1, v1);
+    
     %% Energy levels
     field23 = 'energyLevels';
     % Lambda for energy levels only
@@ -149,7 +156,7 @@ function sP = setSystemParameters()
     % Parameters: These are energy^(0)
     f1 = 'eB1'; v1 = 0;
     % eQ = eB + 2 * Uep - ue + LamDQ - 50
-    f2 = 'eQ1'; v2 = v1 + 2 * value17 - value22.ue + LamB1Q1 - 50;
+    f2 = 'eQ1'; v2 = v1 + 2 * value17 - value22a.ue + LamB1Q1 - 50;
     % eH = eQ + LamHQ; % - alph*uLH;
     f3 = 'eH1'; v3 = v2 + LamH1Q1;
     % eL = eQ - LamLQ; % - alph*uLH;
@@ -255,6 +262,6 @@ function sP = setSystemParameters()
         field10, value10, field11, value11, ...
         field12, value12, field13, value13, field14, value14, field15, value15, ...
         field16, value16, field17, value17, field18, value18, field19, value19, ...
-        field20, value20, field21, value21, field22, value22, field23, value23, ...
+        field20, value20, field21, value21, field22a, value22a, field22b, value22b, field23, value23, ...
         field24, value24, field25, value25, field26, value26, field27, value27);
 end

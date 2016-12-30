@@ -1,4 +1,4 @@
-function sS0 = setSystemInitialState(Voltage, SDChain, sP)
+function sS0 = setSystemInitialState(sP)
     %% System state
     field1 = 'systemStates';
     % A1-site state
@@ -13,17 +13,24 @@ function sS0 = setSystemInitialState(Voltage, SDChain, sP)
     % L2-site state
     % nL2 = 0, empty L2-site
     f4 = 'L2Site'; v4 = 0;
+    f5 = 'R2Site'; v5 = 0;
+    f6 = 'Quinone2el'; v6 = 0;
+    f7 = 'Quinone2pr'; v7 = 0;
+    f8 = 'A2Site'; v8 = 0;
+    f9 = 'B2Site'; v9 = 0;
+    
     % First quinone state
     % First quinone initial state (from 1 to 16) (Q1-basis on Feb/2/2011/A-6)
     MQ1 = 1;
-    f5 = 'Quinone1'; v5 = zeros(sP.numberOfLevels.Q1, 1);
-    v5(MQ1) = 1;
+    f10 = 'Quinone1'; v10 = zeros(sP.numberOfLevels.Q1, 1);
+    v10(MQ1) = 1;
     % LH-system state
     % LH system at t=0 (from 1 to 4)(LH-basis on Feb/2/2011/A-5)
     MLH = 3;
-    f6 = 'LHSystem'; v6 = zeros(sP.numberOfLevels.LH, 1);
-    v6(MLH) = 1;
-    value1 = struct(f1, v1, f2, v2, f3, v3, f4, v4, f5, v5, f6, v6);
+    f11 = 'LHSystem'; v11 = zeros(sP.numberOfLevels.LH, 1);
+    v11(MLH) = 1;
+    value1 = struct(f1, v1, f2, v2, f3, v3, f4, v4, f5, v5, f6, v6, ...
+        f7, v7, f8, v8, f9, v9, f10, v10, f11, v11);
     
     %% First quinone position
     % initial position of first Quinone on the N-side on membrane
@@ -33,8 +40,8 @@ function sS0 = setSystemInitialState(Voltage, SDChain, sP)
     % Source-L2 (electrons) 
     muSDPlus = 1620;
     field3 = 'chemicalPotentials';
-    f1 = 'S';  v1 = 0.5 * (muSDPlus + SDChain);
-    f2 = 'L2'; v2 = 0.5 * (muSDPlus - SDChain);
+    f1 = 'S';  v1 = 0.5 * (muSDPlus + sP.SDChain);
+    f2 = 'L2'; v2 = 0.5 * (muSDPlus - sP.SDChain);
     f3 = 'N';  v3 = -sP.dM / 2;
     f4 = 'P';  v4 = sP.dM / 2;
     value3 = struct(f1, v1, f2, v2, f3, v3, f4, v4);
@@ -42,8 +49,8 @@ function sS0 = setSystemInitialState(Voltage, SDChain, sP)
     %% Membrane potentials
     field4 = 'membranePotentials';
     f1 = 'dV'; v1 = 20;
-    f2 = 'VN'; v2 = 0.5 * (Voltage - v1);
-    f3 = 'VP'; v3 = 0.5 * (Voltage + v1);
+    f2 = 'VN'; v2 = 0.5 * (sP.VSet - v1);
+    f3 = 'VP'; v3 = 0.5 * (sP.VSet + v1);
     value4 = struct(f1, v1, f2, v2, f3, v3);
     
     %% Energy shifts of A,B,L,H energies due to NP field gradient
@@ -58,7 +65,7 @@ function sS0 = setSystemInitialState(Voltage, SDChain, sP)
     f4 = 'eL1'; v4 = sP.energyLevels.eL1 + value4.VP;
     % EQ1 = 1.5 * Uep - 0.5 * Up + 0.5 * (VP - VN) + 
     % + 0.5 * (muN + muP) - 25
-    f5 = 'EQ1'; v5 = 1.5 * sP.Uep - 0.5 * sP.columbQuinone1.Up + ...
+    f5 = 'EQ1'; v5 = 1.5 * sP.columbQuinone1.Uep - 0.5 * sP.columbQuinone1.Up + ...
         0.5 * (value4.VP - value4.VN) + 0.5 * (value3.N + value3.P) - 25;
     value5 = struct(f1, v1, f2, v2, f3, v3, f4, v4, f5, v5);
     

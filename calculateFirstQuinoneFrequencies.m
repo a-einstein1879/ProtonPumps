@@ -1,7 +1,4 @@
 function OmegaQ = calculateFirstQuinoneFrequencies(sP, sS)
-    % Change of energy levels of first quinone electrons and protons
-    % that happen due to effects of surface potential (transmembrane voltage)
-    % e - electron, E - proton. Q - first quinone
     xQ = sS.quinone1Position;
     x0 = sP.q1MM.x0;
     VN = sS.membranePotentials.VN;
@@ -15,7 +12,10 @@ function OmegaQ = calculateFirstQuinoneFrequencies(sP, sS)
     n2 = a2' * a2;
     N1 = b1' * b1;
     N2 = b2' * b2;
-    
+
+    % Change of energy levels of first quinone electrons and protons
+    % that happen due to effects of surface potential (transmembrane voltage)
+    % e - electron, E - proton. Q - first quinone
     VseQ =  VN * (xQ - x0) / (2 * x0) + VP * (xQ + x0) / (2 * x0);
     
     if xQ < -x0
@@ -41,10 +41,10 @@ function OmegaQ = calculateFirstQuinoneFrequencies(sP, sS)
     
     HQcharge = Ucharge * sS.qqQ1;
     % Total Hamiltonian of first Quinone (without tunnelings)
-    HQA = sS.hamiltonians.HQ10 + HQcharge + HQx;
+    H = sS.hamiltonians.HQ10 + HQcharge + HQx;
         
     % Energy levels of basis states of first Quinone (with xQ-dependence)
-    EnQ = diag(HQA);
+    EnQ = diag(H);
 
     % Duplication of column EnQ (result: NLevQ stobzov of EnQ)
     EnQd = repmat(EnQ, 1, sP.numberOfLevels.Q1);
