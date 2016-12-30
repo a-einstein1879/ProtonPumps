@@ -3,6 +3,13 @@ function [] = main()
     sP = setSystemParameters();
     sS0 = setSystemInitialState(sP);
     [dynamicsOutput, cumulativeOutput] = runSimulation(sP, sS0);
+    x = 0:sP.nOS;
+    hold on
+    plot(x, dynamicsOutput.nA);
+    plot(x, dynamicsOutput.nB);
+    plot(x, dynamicsOutput.nL);
+    plot(x, dynamicsOutput.nH);
+    hold off
     toc;
 end
 
@@ -18,15 +25,15 @@ function [dynamicsOutput, cumulativeOutput] = runSimulation(sP, sS)
     f7 = 'n2Q';             v7 = zeros(1, sP.nOS);
     f8 = 'N1Q';             v8 = zeros(1, sP.nOS);
     f9 = 'N2Q';             v9 = zeros(1, sP.nOS);
-    f10 = 'nL2';            v10 = zeros(1, sP.nOS);
+    f10 = 'nD';             v10 = zeros(1, sP.nOS);
     for time = 2:sP.nOS
-        OmegaQ = calculateFirstQuinoneFrequencies(sP, sS);
+        OmegaQ = calculateQuinoneFrequencies(sP, sS);
         
-        [gammaA, gammaB] = calculateFirstABGammas(sS, sP, OmegaQ);
+        [gammaA, gammaB] = calculateABGammas(sS, sP, OmegaQ);
         
-        gammaLH = calculateLHSystemGamma(sP, sS, OmegaQ);
+        gammaLH = calculateLHGamma(sP, sS, OmegaQ);
         
-        [gammaQ, WNpr, WPpr] = calculateFirstQuinoneGamma(sP, sS, OmegaQ);
+        gammaQ = calculateQuinoneGamma(sP, sS, OmegaQ);
         
 %        OmegaQ
 %        gammaA
@@ -39,20 +46,20 @@ function [dynamicsOutput, cumulativeOutput] = runSimulation(sP, sS)
         sS = changeSystemState(sS, sP, gammaA, gammaB, gammaLH, gammaQ);
         
         %% Fill in the output array
-        v1(time + 1) = sS.quinone1Position;
-        v2(time + 1) = sS.systemStates.A1Site;
-        v3(time + 1) = sS.systemStates.B1Site;
-        v4(time + 1) = sum(sP.populationOperators.nL1 * sS.systemStates.LHSystem);
-        v5(time + 1) = sum(sP.populationOperators.nH1 * sS.systemStates.LHSystem);
-        v6(time + 1) = sum(sP.populationOperators.Q1n1 * sS.systemStates.Quinone1);
-        v7(time + 1) = sum(sP.populationOperators.Q1n2 * sS.systemStates.Quinone1);
-        v8(time + 1) = sum(sP.populationOperators.Q1N1 * sS.systemStates.Quinone1);
-        v9(time + 1) = sum(sP.populationOperators.Q1N2 * sS.systemStates.Quinone1);
-        v10(time + 1) = sS.systemStates.L2Site;
+        v1(time + 1) = sS.quinonePosition;
+        v2(time + 1) = sS.systemStates.ASite;
+        v3(time + 1) = sS.systemStates.BSite;
+        v4(time + 1) = sum(sP.populationOperators.nL * sS.systemStates.LHSystem);
+        v5(time + 1) = sum(sP.populationOperators.nH * sS.systemStates.LHSystem);
+        v6(time + 1) = sum(sP.populationOperators.n1 * sS.systemStates.Quinone);
+        v7(time + 1) = sum(sP.populationOperators.n2 * sS.systemStates.Quinone);
+        v8(time + 1) = sum(sP.populationOperators.N1 * sS.systemStates.Quinone);
+        v9(time + 1) = sum(sP.populationOperators.N2 * sS.systemStates.Quinone);
+        v10(time + 1) = sS.systemStates.DSite;
     end
     
     fileID = fopen('testout.txt','w');
-    fprintf(fileID, 'nA\tnB\tnL\tnH\tnL2\r\n');
+    fprintf(fileID, 'nA\tnB\tnL\tnH\tnD\r\n');
     for time = 2:sP.nOS
         fprintf(fileID, '%.2f\t%.2f\t%.2f\t%.2f\t%.2f\r\n', v2(time), v3(time), v4(time), v5(time), v10(time));
     end

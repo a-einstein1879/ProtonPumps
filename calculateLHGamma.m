@@ -1,13 +1,13 @@
 function gammaLH = calculateLHGamma(sP, sS, OmegaQ)
     % Total gamma of LH system, is summ of
-    % LH tunneling, LQ1 tunneling and HQ1 tunneling
-    % Contribution of first Quinone to LH evolution
+    % LH tunneling, LQ tunneling and HQ tunneling
+    % Contribution of Quinone to LH evolution
     NLevLH = sP.numberOfLevels.LH;
     
-    a1 = sP.CAOperators.Q1a1;
-    a2 = sP.CAOperators.Q1a2;
-    aL = sP.CAOperators.aL1;
-    aH = sP.CAOperators.aH1;
+    a1 = sP.CAOperators.a1;
+    a2 = sP.CAOperators.a2;
+    aL = sP.CAOperators.aL;
+    aH = sP.CAOperators.aH;
     aaL = abs(aL).^2;
     aaH = abs(aH).^2;
     aaLH = abs(aL' * aH).^2;
@@ -15,14 +15,14 @@ function gammaLH = calculateLHGamma(sP, sS, OmegaQ)
     
     TT = sP.TT;
     omegaLH = sS.hamiltonians.omegaLH;
-    DeLamLQ = sP.delam.DeLamL1Q1;
-    DeLamHQ = sP.delam.DeLamH1Q1;
-    LamLQ = sP.lambdas.LamL1Q1;
-    LamHQ = sP.lambdas.LamH1Q1;
-    LamLH = sP.lambdas.LamL1H1;
-    dLH = sP.tunnelingAmplitudes.dL1H1;
+    DeLamLQ = sP.delam.DeLamLQ;
+    DeLamHQ = sP.delam.DeLamHQ;
+    LamLQ = sP.lambdas.LamLQ;
+    LamHQ = sP.lambdas.LamHQ;
+    LamLH = sP.lambdas.LamLH;
+    dLH = sP.tunnelingAmplitudes.dLH;
     
-    Qs = sS.systemStates.Quinone1;
+    Qs = sS.systemStates.Quinone;
 
     PhL = zeros(NLevLH,NLevLH);
     PhH = zeros(NLevLH,NLevLH);
@@ -41,9 +41,9 @@ function gammaLH = calculateLHGamma(sP, sS, OmegaQ)
 
     % see Feb/3/2011/A-5, matrix NLevRC X NLevRC
     % gamLHQ = WPel.*(DeLamL1*PhL1 + DeLamL2*PhL2) + WNel.*(DeLamH1*PhH1 + DeLamH2*PhH2)
-    xQ = sS.quinone1Position;
-    x0 = sP.q1MM.x0;
-    delta = sP.transferDistances.q1ToAB1;
+    xQ = sS.quinonePosition;
+    x0 = sP.qMM.x0;
+    delta = sP.transferDistances.qToAB;
     WPel = exp(-2 * abs(xQ - x0) / delta);
     WNel = exp(-2 * abs(xQ + x0) / delta);
     gamLHQ = WPel .* DeLamLQ * PhL + WNel .* DeLamHQ * PhH;
